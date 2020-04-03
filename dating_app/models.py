@@ -65,8 +65,7 @@ class Message(models.Model):
         verbose_name_plural = 'Сообщения'
 
     dialog = models.ForeignKey(Dialog, verbose_name="Dialog", related_name="messages", on_delete=models.CASCADE)
-    sender = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Author"), related_name="messages",
-                               on_delete=models.CASCADE)
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Author", on_delete=models.CASCADE)
     text = models.TextField(verbose_name="Message text")
     read = models.BooleanField(verbose_name="Read", default=False)
     pub_date = models.DateTimeField(auto_now_add=True)
@@ -90,3 +89,4 @@ class MatchFriend(models.Model):
             current_user=current_user
         )
         friend.users.remove(new_match_friend)
+
