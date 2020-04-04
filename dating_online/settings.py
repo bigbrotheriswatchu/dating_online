@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'dating_app',
+    'sorl.thumbnail',
+    'storages',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -118,5 +120,22 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
+# setting for static files in developing and prod
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+  os.path.join(BASE_DIR, "static", "static_dev"),
+)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'dating_online/media')
+
+
+# S3 BUCKETS CONFIG
+AWS_ACCESS_KEY_ID = 'AKIA6LDVGNCLUJD3QBJB'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'online-dating-bucket'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+#STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
