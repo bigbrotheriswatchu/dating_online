@@ -1,0 +1,22 @@
+{% extends 'dating_app/base_dating.html' %}
+
+{% block content %}
+
+    <form class="col-5 mx-auto">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+      </div>
+
+      <button type="submit" class="btn btn-primary">Войти</button>
+      <a class="ml-4" href="{% url 'social:begin' 'vk-oauth2' %}"><img src="https://online-dating-bucket.s3-us-west-2.amazonaws.com/images/vk-brands.svg" style="width: 60px;"></a>
+
+    </form>
+
+{% endblock %}
