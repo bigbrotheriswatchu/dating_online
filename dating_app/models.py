@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from sorl.thumbnail import ImageField
 from django.contrib.auth.models import User
 from django.urls import reverse
 
@@ -11,8 +12,8 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     # choices for gender
-    MALE    = 'M'
-    FEMALE  = 'FM'
+    MALE = 'M'
+    FEMALE = 'FM'
     UNKNOWN = 'UNKW'
 
     GENDERS = (
@@ -32,7 +33,7 @@ class UserProfile(models.Model):
         ]
 
     about_me = models.TextField(max_length=300)
-    avatar      =   models.ImageField(upload_to='profile_image', blank=True)
+    avatar = ImageField(upload_to='profile_image', blank=True)
 
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
@@ -73,8 +74,7 @@ class Message(models.Model):
 
 class MatchFriend(models.Model):
     users = models.ManyToManyField(UserProfile)
-
-    current_user = models.ForeignKey(UserProfile, related_name='owner',  on_delete=models.CASCADE, default=False)
+    current_user = models.ForeignKey(UserProfile, related_name='owner', on_delete=models.CASCADE, default=False)
 
     @classmethod
     def make_friend(cls, current_user, new_match_friend):
@@ -89,4 +89,3 @@ class MatchFriend(models.Model):
             current_user=current_user
         )
         friend.users.remove(new_match_friend)
-
