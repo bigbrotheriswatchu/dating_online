@@ -123,12 +123,14 @@ USE_TZ = True
 # setting for static files in developing and prod
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-  os.path.join(BASE_DIR, "static", "static_dev"),
-)
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'dating_online/media')
+MEDIA_URL = '/images/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 
 # S3 BUCKETS CONFIG
