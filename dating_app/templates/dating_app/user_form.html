@@ -1,0 +1,14 @@
+{% extends 'dating_app/base_dating.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12 mb-3">
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">save</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -49,7 +49,14 @@ INSTALLED_APPS = [
 # OAUTH settings
 SOCIAL_AUTH_VK_OAUTH2_KEY = config('VK_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = config('VK_SECRET')
-SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['fields']
+
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'city'
+}
+SOCIAL_AUTH_VK_OAUTH2_EXTRA_DATA = [
+    'city'
+]
 
 # бекенд авторизации через ВКонтакте
 AUTHENTICATION_BACKENDS = (
@@ -59,7 +66,7 @@ AUTHENTICATION_BACKENDS = (
 
 SOCIAL_AUTH_CREATE_USERS = True
 
-# Перечислим pipeline, которые последовательно буду обрабатывать респонс
+
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
@@ -179,5 +186,5 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'profile'
+LOGIN_REDIRECT_URL = '/accounts/profile/'
 LOGOUT_URL = 'logout'

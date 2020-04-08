@@ -1,0 +1,13 @@
+{% extends 'dating_app/base_dating.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12 mb-3 text-center">
+           {{ user.first_name }} {{ user.last_name }}{{ extra_data.city.title }}<br>
+            <a href="{% url 'user_update' pk=request.user.userprofile.pk %}">Настройки пользователя</a><br>
+            <a href="{% url 'profile_update' pk=request.user.userprofile.pk %}">Изменить анкету</a>
+
+
+    </div>
+</div>
+{% endblock %}
