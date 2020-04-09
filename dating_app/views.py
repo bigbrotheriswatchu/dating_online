@@ -1,12 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import UpdateView, DetailView
-from django.contrib.auth.views import LogoutView
 
-from social_django.context_processors import backends
-
-from .forms import *
-from .models import *
+from django.contrib.auth.models import User
+from .forms import ExtendedUserCreationForm, UserProfileForm
+from .models import UserProfile
 
 
 def login(request):
