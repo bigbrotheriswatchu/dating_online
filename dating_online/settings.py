@@ -46,20 +46,26 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+SOCIAL_AUTH_FACEBOOK_KEY = config('FB_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET = config('FB_SECRET')
+
 # OAUTH settings
 SOCIAL_AUTH_VK_OAUTH2_KEY = config('VK_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = config('VK_SECRET')
-SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['fields']
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['photos']
+SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ['key']
 
-SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-    'fields': 'city'
+SOCIAL_AUTH_VK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'photo'
 }
-SOCIAL_AUTH_VK_OAUTH2_EXTRA_DATA = [
-    'city'
+SOCIAL_AUTH_VK_EXTRA_DATA = [
+    ('photo', 'photo'),
 ]
 
 # бекенд авторизации через ВКонтакте
 AUTHENTICATION_BACKENDS = (
+    'social_core.backends.instagram.InstagramOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
     'social_core.backends.vk.VKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
@@ -78,6 +84,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
+    'dating_app.pipeline.get_profile_image',
 )
 
 MIDDLEWARE = [

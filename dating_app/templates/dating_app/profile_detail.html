@@ -1,13 +1,17 @@
 {% extends 'dating_app/base_dating.html' %}
 
 {% block content %}
-<div class="row">
-    <div class="col-sm-12 mb-3 text-center">
-           {{ user.first_name }} {{ user.last_name }}{{ extra_data.city.title }}<br>
+<div class="container col-6 mx-auto">
+    <div class="col-2 mx-auto">
+        <img src="{{ user.userprofile.avatar.url }}">
+    </div>
+    <div class="mt-3 text-center">
+        {{ user.first_name }} {{ user.last_name }}<br>
+        {{ user.userprofile.location }}
+
+            <br>
             <a href="{% url 'user_update' pk=request.user.userprofile.pk %}">Настройки пользователя</a><br>
             <a href="{% url 'profile_update' pk=request.user.userprofile.pk %}">Изменить анкету</a>
-
-
     </div>
 </div>
 {% endblock %}

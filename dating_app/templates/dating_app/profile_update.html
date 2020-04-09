@@ -5,6 +5,7 @@
     <form method="POST" class="form-group" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group mx-auto">
+            {{ form.user }}
             <h4 class="">Аватар:</h4>
             <input type="file" class="form-control-file" id="exampleFormControlFile1" {{ form.avatar }}
         </div>
@@ -23,11 +24,7 @@
         <div class="form-group mt-4">
             <div class="">
                 <h4>Локация:</h4>
-                {% if provider == 'vk-oauth2' %}
-                    <input type="text" class="form-control" value="{{ extra_data.city.title }}" placeholder="Место положения" {{ form.location }}>
-                {% else %}
-                    <input type="text" class="form-control" placeholder="" {{ form.location }}>
-                {% endif %}
+                    <input type="text" class="form-control" placeholder="" {{ form.location }}
             </div>
         </div>
 

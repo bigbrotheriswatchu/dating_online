@@ -2,7 +2,8 @@ from django.conf import settings
 from django.db import models
 from sorl.thumbnail import ImageField
 from django.contrib.auth.models import User
-from django.urls import reverse
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class UserProfile(models.Model):
@@ -24,19 +25,28 @@ class UserProfile(models.Model):
     genders = models.CharField(max_length=10, choices=GENDERS, default=UNKNOWN)
 
     # head information about profile
-    location = models.CharField(max_length=50)
-    age = models.PositiveIntegerField()
+    location = models.CharField(max_length=50, blank=True)
+    age = models.PositiveIntegerField(default=18)
 
     class Meta:
         constraints = [
             models.CheckConstraint(check=models.Q(age__gte=18), name='age_gte_18'),
         ]
 
-    about_me = models.TextField(max_length=300)
+    about_me = models.TextField(max_length=300, blank=True)
     avatar = ImageField(upload_to='profile_image', blank=True)
 
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
+
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            UserProfile.objects.create(user=instance)
+
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        instance.userprofile.save()
 
 
 class Interests(models.Model):

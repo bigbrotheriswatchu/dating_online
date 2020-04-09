@@ -1,6 +1,10 @@
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import UpdateView, DetailView
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LogoutView
+
+from social_django.context_processors import backends
+
 from .forms import *
 from .models import *
 
@@ -9,7 +13,7 @@ def login(request):
     return render(request, 'registration/login.html')
 
 
-class UserProfileDetailView(DetailView):
+class UserProfileDetailView(LoginRequiredMixin, DetailView):
     Model = UserProfile
     template_name = 'dating_app/profile_detail.html'
 
@@ -24,8 +28,9 @@ class UserProfileDetailView(DetailView):
 class UserProfileUpdateView(UpdateView):
     template_name = 'dating_app/profile_update.html'
     model = UserProfile
-    fields = '__all__'
-    template_name_suffix = '_update'
+    fields = ['genders', 'age', 'location', 'about_me', 'avatar']
+    #template_name_suffix = '_update'
+    success_url = "/accounts/profile/"
 
     def form_valid(self, form):
         print(form.cleaned_data)
@@ -41,3 +46,4 @@ class UserUpdateView(UpdateView):
     def form_valid(self, form):
         print(form.cleaned_data)
         return super().form_valid(form)
+
