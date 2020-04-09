@@ -13,6 +13,7 @@ def login(request):
     return render(request, 'registration/login.html')
 
 
+# showing user profile
 class UserProfileDetailView(LoginRequiredMixin, DetailView):
     Model = UserProfile
     template_name = 'dating_app/profile_detail.html'
@@ -25,11 +26,12 @@ class UserProfileDetailView(LoginRequiredMixin, DetailView):
         return super().form_valid(form)
 
 
+# user profile edition
 class UserProfileUpdateView(UpdateView):
     template_name = 'dating_app/profile_update.html'
     model = UserProfile
     fields = ['genders', 'age', 'location', 'about_me', 'avatar']
-    #template_name_suffix = '_update'
+    # template_name_suffix = '_update'
     success_url = "/accounts/profile/"
 
     def form_valid(self, form):
@@ -37,13 +39,14 @@ class UserProfileUpdateView(UpdateView):
         return super().form_valid(form)
 
 
+# user edition (password, login...)
 class UserUpdateView(UpdateView):
     template_name = 'dating_app/user_form.html'
     model = User
     form_class = ExtendedUserCreationForm
-    template_name_suffix = '_form'
+
+    # template_name_suffix = '_form'
 
     def form_valid(self, form):
         print(form.cleaned_data)
         return super().form_valid(form)
-

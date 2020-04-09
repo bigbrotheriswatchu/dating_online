@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     'storages',
     'social_django',
+    'crispy_forms',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+# for bootstrap forms
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 SOCIAL_AUTH_FACEBOOK_KEY = config('FB_KEY')
 SOCIAL_AUTH_FACEBOOK_SECRET = config('FB_SECRET')
@@ -64,8 +67,6 @@ SOCIAL_AUTH_VK_EXTRA_DATA = [
 
 # бекенд авторизации через ВКонтакте
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.instagram.InstagramOAuth2',
-    'social_core.backends.facebook.FacebookOAuth2',
     'social_core.backends.vk.VKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )

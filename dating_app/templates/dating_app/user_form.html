@@ -1,14 +1,15 @@
 {% extends 'dating_app/base_dating.html' %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 <div class="row">
-    <div class="col-sm-12 mb-3">
-
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">save</button>
+    <div class="col-6 mb-3 mx-auto">
+        <form>
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button type="submit" class="btn btn-outline-dark">Save person</button>
         </form>
-    </div>
+
 </div>
+
 {% endblock %}

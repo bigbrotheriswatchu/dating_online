@@ -6,7 +6,7 @@ from django.core.files.base import ContentFile
 
 def get_profile_image(backend, user, response, is_new=False, *args, **kwargs):
     if user is None:
-        return print('net')
+        return print('none')
 
     elif backend.name == 'vk-oauth2':
         avatar_url = response['photo']
