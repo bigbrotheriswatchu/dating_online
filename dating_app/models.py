@@ -13,9 +13,9 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     # choices for gender
-    MALE = 'M'
-    FEMALE = 'FM'
-    UNKNOWN = 'UNKW'
+    MALE = 'Мужчина'
+    FEMALE = 'Женщина'
+    UNKNOWN = 'Неизвестно'
 
     GENDERS = (
         (MALE, 'Мужчина'),
@@ -36,6 +36,14 @@ class UserProfile(models.Model):
     about_me = models.TextField(max_length=300, blank=True)
     avatar = ImageField(upload_to='profile_image', blank=True)
 
+    # like and skip
+    skip_ids = models.ManyToManyField("UserProfile", blank=True, related_name='skip_id')
+    like_ids = models.ManyToManyField("UserProfile", blank=True, related_name='like_id')
+    #preferences
+    from_age = models.PositiveIntegerField(default=18)
+    to_age = models.PositiveIntegerField(default=18)
+    gender_pref = models.CharField(max_length=10, choices=GENDERS, default=UNKNOWN)
+
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
 
@@ -47,6 +55,7 @@ class UserProfile(models.Model):
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         instance.userprofile.save()
+
 
 
 class Interests(models.Model):
@@ -67,7 +76,7 @@ class Dialog(models.Model):
     opponent = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Dialog opponent", on_delete=models.CASCADE)
 
     def __str__(self):
-        return _("Chat with ") + self.opponent.username
+        return "Chat with " + self.opponent.username
 
 
 class Message(models.Model):
@@ -83,19 +92,25 @@ class Message(models.Model):
 
 
 class MatchFriend(models.Model):
-    users = models.ManyToManyField(UserProfile)
-    current_user = models.ForeignKey(UserProfile, related_name='owner', on_delete=models.CASCADE, default=False)
+    users = models.ForeignKey(UserProfile, related_name='to_user', on_delete=models.CASCADE, default=False)
+    current_user = models.ForeignKey(UserProfile, related_name='form_user', on_delete=models.CASCADE, default=False)
+    is_like = models.BooleanField(default=False)
 
-    @classmethod
-    def make_friend(cls, current_user, new_match_friend):
-        friend, create = cls.objects.get_or_create(
-            current_user=current_user
-        )
-        friend.users.add(new_match_friend)
+    def __str__(self):
+        return self.current_user.user.first_name +' '+ self.current_user.user.last_name
 
-    @classmethod
-    def lose_friend(cls, current_user, new_match_friend):
-        friend, create = cls.objects.get_or_create(
-            current_user=current_user
-        )
-        friend.users.remove(new_match_friend)
+    #@classmethod
+    #def make_like(cls, current_user, new_like):
+    #    friend, create = cls.objects.get_or_create(
+    #        current_user=current_user,
+    #        is_match=True,
+    #    )
+        friend.users.add(new_like)
+
+    #@classmethod
+    #def lose_like(cls, current_user, new_like):
+    #    friend, create = cls.objects.get_or_create(
+    #        current_user=current_user,
+    #        is_match=False,
+    #    )
+    #    friend.users.remove(new_like)

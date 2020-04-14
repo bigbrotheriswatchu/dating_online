@@ -1,0 +1,34 @@
+{% extends 'dating_app/base_dating.html' %}
+        <div class="form-group mx-auto">
+            {{ form.user }}
+            <h4 class="">Аватар:</h4>
+            <input type="file" class="form-control-file" id="exampleFormControlFile1" {{ form.avatar }}
+        </div>
+
+        <div class="form-row">
+            <div class="col d-inline">
+                <h4 class="">Пол:</h4>
+                {{ form.genders }}
+            </div>
+            <div class="col d-inline">
+                <h3>Возраст:</h3>
+                {{ form.age }}
+            </div>
+        </div>
+
+        <div class="form-group mt-4">
+            <div class="">
+                <h4>Локация:</h4>
+                    <input type="text" class="form-control" placeholder="" {{ form.location }}
+            </div>
+        </div>
+
+        <div class="form-row mt-3">
+            <div class="form-group col">
+              <h3>Обо мне:</h3>
+              <textarea type="text" class="form-control" placeholder="" {{ form.about_me }}
+              </textarea>
+        <button type="submit" class="btn btn-outline-dark mt-3">Сохранить</button>
+        </div>
+
+{% endblock %}

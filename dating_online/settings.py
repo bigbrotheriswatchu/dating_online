@@ -62,7 +62,7 @@ SOCIAL_AUTH_VK_PROFILE_EXTRA_PARAMS = {
     'fields': 'photo'
 }
 SOCIAL_AUTH_VK_EXTRA_DATA = [
-    ('photo', 'photo'),
+    ('photo_max', 'photo'),
 ]
 
 # бекенд авторизации через ВКонтакте
