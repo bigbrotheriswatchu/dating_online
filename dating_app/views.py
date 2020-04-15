@@ -70,26 +70,15 @@ class DatingListView(ListView):
                                           genders=profile.gender_pref).exclude(pk__in=skip_pk).exclude(pk__in=like_pk)
 
 
-# function for like in /dating/ page
-def send_like_to_profile(request, pk):
-    if request.user.is_authenticated:
-        user = request.user.userprofile
-        profile = get_object_or_404(UserProfile, pk=pk)
-        like_request, created = MatchFriend.objects.get_or_create(
-            current_user=request.user.userprofile,
-            users=profile, is_like=True,
-        )
-        user.like_ids.add(profile)
-        return HttpResponseRedirect('/dating/')
-
-
 # function for skip in /dating/ page
-def send_skip_to_profile(request, operation, pk):
+def send_skip_or_like_to_profile(request, operation, pk):
+    user = request.user.userprofile
+    like_or_skip_user = get_object_or_404(UserProfile, pk=pk)
     if operation == 'skip':
-        user = request.user.userprofile
-        skip_user = get_object_or_404(UserProfile, pk=pk)
-        user.skip_ids.add(skip_user)
-        return HttpResponseRedirect('/dating/')
+        user.skip_ids.add(like_or_skip_user)
+    elif operation == 'like':
+        user.skip_ids.add(like_or_skip_user)
+    return HttpResponseRedirect('/dating/')
 
 
 class MutualMatchView(ListView, MultipleObjectMixin):

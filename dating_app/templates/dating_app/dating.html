@@ -13,8 +13,8 @@
         </h5>
 
         <div class="mt-3">
-            <a href="{% url 'like' pk=profile.pk %}" class="btn btn-outline-dark mr-2">Like</a>
-            <a href="{% url 'skip_user' operation='skip' pk=profile.pk %}" class="btn btn-outline-dark">Skip</a>
+            <a href="{% url 'skip_or_like_user' operation='like' pk=profile.pk %}" class="btn btn-outline-dark mr-2">Like</a>
+            <a href="{% url 'skip_or_like_user' operation='skip' pk=profile.pk %}" class="btn btn-outline-dark">Skip</a>
         </div>
         {% endfor %}
       </div>

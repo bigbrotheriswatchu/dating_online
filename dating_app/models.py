@@ -57,7 +57,6 @@ class UserProfile(models.Model):
         instance.userprofile.save()
 
 
-
 class Interests(models.Model):
     interests = models.ManyToManyField(UserProfile, blank=True)
     title = models.CharField(max_length=50, blank=True)
@@ -99,18 +98,4 @@ class MatchFriend(models.Model):
     def __str__(self):
         return self.current_user.user.first_name +' '+ self.current_user.user.last_name
 
-    #@classmethod
-    #def make_like(cls, current_user, new_like):
-    #    friend, create = cls.objects.get_or_create(
-    #        current_user=current_user,
-    #        is_match=True,
-    #    )
-        friend.users.add(new_like)
 
-    #@classmethod
-    #def lose_like(cls, current_user, new_like):
-    #    friend, create = cls.objects.get_or_create(
-    #        current_user=current_user,
-    #        is_match=False,
-    #    )
-    #    friend.users.remove(new_like)
