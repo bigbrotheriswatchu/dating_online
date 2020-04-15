@@ -7,6 +7,7 @@ from django.views.generic import UpdateView, DetailView, ListView
 
 from django.contrib.auth.models import User
 from django.views.generic.edit import FormMixin
+from django.views.generic.list import MultipleObjectMixin
 
 from .forms import ExtendedUserCreationForm, UserProfileForm
 from .models import UserProfile, MatchFriend
@@ -17,7 +18,6 @@ def login(request):
 
 
 # showing user profile
-
 class UserProfileDetailView(LoginRequiredMixin, DetailView):
     Model = UserProfile
     template_name = 'dating_app/profile_detail.html'
@@ -90,3 +90,23 @@ def send_skip_to_profile(request, operation, pk):
         skip_user = get_object_or_404(UserProfile, pk=pk)
         user.skip_ids.add(skip_user)
         return HttpResponseRedirect('/dating/')
+
+
+class MutualMatchView(ListView, MultipleObjectMixin):
+    model = UserProfile
+    template_name_suffix = 'match.html'
+    template_name = 'dating_app/match.html'
+
+    def get_queryset(self):
+        profile = self.request.user.userprofile
+        like_pk_self = profile.like_ids.values_list('pk', flat=True)
+        list_users = UserProfile.objects.all()
+
+        mutualikes = []
+
+        for person in list_users:
+            list_pk_profile = person.like_ids.values_list('pk', flat=True)
+            if person.pk in like_pk_self and profile.pk in list_pk_profile:
+                mutualikes.append(person)
+
+        return mutualikes
