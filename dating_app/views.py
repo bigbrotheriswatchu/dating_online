@@ -88,14 +88,10 @@ class MutualMatchView(ListView, MultipleObjectMixin):
 
     def get_queryset(self):
         profile = self.request.user.userprofile
-        like_pk_self = profile.like_ids.values_list('pk', flat=True)
-        list_users = UserProfile.objects.all()
+        #my_likes = profile.like_ids.values_list('like_ids', flat=True)
+        who_liked_me = UserProfile.objects.values_list('pk', flat=True)
 
-        mutualikes = []
+        return profile.like_ids.filter( pk__in=who_liked_me)
 
-        for person in list_users:
-            list_pk_profile = person.like_ids.values_list('pk', flat=True)
-            if person.pk in like_pk_self and profile.pk in list_pk_profile:
-                mutualikes.append(person)
 
-        return mutualikes
+
