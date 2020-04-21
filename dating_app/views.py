@@ -1,8 +1,12 @@
+import json
+
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 from django.views.generic import UpdateView, DetailView, ListView
 
 from django.contrib.auth.models import User
@@ -46,7 +50,7 @@ class UserUpdateView(UpdateView):
     template_name = 'dating_app/user_form.html'
     model = User
     form_class = ExtendedUserCreationForm
-
+    success_url = "/accounts/profile/"
     # template_name_suffix = '_form'
 
     def form_valid(self, form):
@@ -88,10 +92,21 @@ class MutualMatchView(ListView, MultipleObjectMixin):
 
     def get_queryset(self):
         profile = self.request.user.userprofile
-        #my_likes = profile.like_ids.values_list('like_ids', flat=True)
+        # my_likes = profile.like_ids.values_list('like_ids', flat=True)
         who_liked_me = UserProfile.objects.values_list('pk', flat=True)
 
-        return profile.like_ids.filter( pk__in=who_liked_me)
+        return profile.like_ids.filter(pk__in=who_liked_me)
 
+
+def chat(request):
+    return render(request, 'dating_app/chat.html')
+
+
+@login_required
+def room(request, room_name):
+    return render(request, 'dating_app/room.html', {
+        'room_name_json': mark_safe(json.dumps(room_name)),
+        'username': mark_safe(json.dumps(request.user.username)),
+    })
 
 

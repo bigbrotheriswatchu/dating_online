@@ -14,9 +14,9 @@ import os
 from decouple import config
 from os import path
 from django.urls import path
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -33,7 +33,9 @@ SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'dating_app',
+
     'sorl.thumbnail',
     'storages',
     'social_django',
@@ -46,6 +48,23 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+# Channels settings
+
+
+WSGI_APPLICATION = 'dating_online.wsgi.application'
+
+ASGI_APPLICATION = 'dating_online.routing.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
+
 # for bootstrap forms
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -73,13 +92,12 @@ AUTHENTICATION_BACKENDS = (
 
 SOCIAL_AUTH_CREATE_USERS = True
 
-
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.auth_allowed',
     'social_core.pipeline.social_auth.social_user',
-    #'path.to.redirect_if_no_refresh_token',
+    # 'path.to.redirect_if_no_refresh_token',
     'social_core.pipeline.user.get_username',
     'social_core.pipeline.user.create_user',
     'social_core.pipeline.social_auth.associate_user',
@@ -119,9 +137,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'dating_online.wsgi.application'
-
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -131,7 +146,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -151,7 +165,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -165,11 +178,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # setting for dec
 EMAIL_HOST = config('EMAIL_HOST', default='localhost')
 EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
-
 
 # setting for static files in developing and prod
 STATIC_URL = '/static/'
@@ -182,7 +193,6 @@ STATICFILES_DIRS = [
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
-
 # S3 BUCKETS CONFIG
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
@@ -190,9 +200,10 @@ AWS_STORAGE_BUCKET_NAME = 'online-dating-bucket'
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-#STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/accounts/profile/'
 LOGOUT_URL = 'logout'
+
