@@ -92,33 +92,9 @@ class MutualMatchView(ListView, MultipleObjectMixin):
 
     def get_queryset(self):
         profile = self.request.user.userprofile
-<<<<<<< HEAD
+
         # my_likes = profile.like_ids.values_list('like_ids', flat=True)
         who_liked_me = UserProfile.objects.values_list('pk', flat=True)
 
         return profile.like_ids.filter(pk__in=who_liked_me)
 
-
-def chat(request):
-    return render(request, 'dating_app/chat.html')
-
-
-@login_required
-def room(request, room_name):
-    return render(request, 'dating_app/room.html', {
-        'room_name_json': mark_safe(json.dumps(room_name)),
-        'username': mark_safe(json.dumps(request.user.username)),
-    })
-=======
-        like_pk_self = profile.like_ids.values_list('pk', flat=True)
-        list_users = UserProfile.objects.all()
-
-        mutualikes = []
->>>>>>> parent of e307439... fixes for mutual likes
-
-        for person in list_users:
-            list_pk_profile = person.like_ids.values_list('pk', flat=True)
-            if person.pk in like_pk_self and profile.pk in list_pk_profile:
-                mutualikes.append(person)
-
-        return mutualikes
