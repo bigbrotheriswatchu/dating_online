@@ -11,5 +11,7 @@ urlpatterns = [
     path("login/", login, name="login"),
     #url(r"^like-request/like/(?P<pk>[\w-]+)/$", send_like_to_profile, name='like'),
     url(r'^connect/(?P<operation>.+)/(?P<pk>\d+)/$', send_skip_or_like_to_profile, name='skip_or_like_user'),
+    path('chat/', chat, name='chat'),
+    path('chat/<str:room_name>/', room, name='room'),
     #path("accounts/logout/", LogoutView.as_view(), name="logout"),
 ]

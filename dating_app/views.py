@@ -1,8 +1,12 @@
+import json
+
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 from django.views.generic import UpdateView, DetailView, ListView
 
 from django.contrib.auth.models import User
@@ -10,7 +14,7 @@ from django.views.generic.edit import FormMixin
 from django.views.generic.list import MultipleObjectMixin
 
 from .forms import ExtendedUserCreationForm, UserProfileForm
-from .models import UserProfile, MatchFriend
+from .models import UserProfile, MatchFriend, Dialog
 
 
 def login(request):
@@ -46,7 +50,7 @@ class UserUpdateView(UpdateView):
     template_name = 'dating_app/user_form.html'
     model = User
     form_class = ExtendedUserCreationForm
-
+    success_url = "/accounts/profile/"
     # template_name_suffix = '_form'
 
     def form_valid(self, form):
@@ -88,14 +92,33 @@ class MutualMatchView(ListView, MultipleObjectMixin):
 
     def get_queryset(self):
         profile = self.request.user.userprofile
-        like_pk_self = profile.like_ids.values_list('pk', flat=True)
-        list_users = UserProfile.objects.all()
+        # my_likes = profile.like_ids.values_list('like_ids', flat=True)
+        who_liked_me = UserProfile.objects.values_list('pk', flat=True)
 
-        mutualikes = []
+        return profile.like_ids.filter(pk__in=who_liked_me)
 
-        for person in list_users:
-            list_pk_profile = person.like_ids.values_list('pk', flat=True)
-            if person.pk in like_pk_self and profile.pk in list_pk_profile:
-                mutualikes.append(person)
 
-        return mutualikes
+def chat(request):
+    return render(request, 'dating_app/chat.html')
+
+
+@login_required
+def room(request, room_name):
+    return render(request, 'dating_app/room.html', {
+        'room_name_json': mark_safe(json.dumps(room_name)),
+        'username': mark_safe(json.dumps(request.user.username)),
+    })
+
+
+def get_last_10_messages(chatId):
+    chat = get_object_or_404(Dialog, id=chatId)
+    return chat.messages.order_by('-timestamp').all()[:10]
+
+
+def get_user_contact(username):
+    user = get_object_or_404(User, username=username)
+    return get_object_or_404(User, user=user)
+
+
+def get_current_chat(chatId):
+    return get_object_or_404(Dialog, id=chatId)
