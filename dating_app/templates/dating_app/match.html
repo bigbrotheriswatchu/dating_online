@@ -1,0 +1,7 @@
+{% extends 'dating_app/base_dating.html' %}
+
+{% block content %}
+       {% for p in object_list  %}
+               <p>{{ p}}</p>
+        {% endfor %}
+{% endblock %}

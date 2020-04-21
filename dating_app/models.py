@@ -57,7 +57,6 @@ class UserProfile(models.Model):
         instance.userprofile.save()
 
 
-
 class Interests(models.Model):
     interests = models.ManyToManyField(UserProfile, blank=True)
     title = models.CharField(max_length=50, blank=True)
@@ -84,11 +83,15 @@ class Message(models.Model):
         verbose_name = 'Сообщение'
         verbose_name_plural = 'Сообщения'
 
-    dialog = models.ForeignKey(Dialog, verbose_name="Dialog", related_name="messages", on_delete=models.CASCADE)
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Author", on_delete=models.CASCADE)
     text = models.TextField(verbose_name="Message text")
-    read = models.BooleanField(verbose_name="Read", default=False)
     pub_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.sender.first_name + ' ' + self.sender.last_name
+
+    def last_10_messages():
+        return Message.objects.order_by('-pub_date').all()[:10]
 
 
 class MatchFriend(models.Model):
@@ -99,18 +102,4 @@ class MatchFriend(models.Model):
     def __str__(self):
         return self.current_user.user.first_name +' '+ self.current_user.user.last_name
 
-    #@classmethod
-    #def make_like(cls, current_user, new_like):
-    #    friend, create = cls.objects.get_or_create(
-    #        current_user=current_user,
-    #        is_match=True,
-    #    )
-        friend.users.add(new_like)
 
-    #@classmethod
-    #def lose_like(cls, current_user, new_like):
-    #    friend, create = cls.objects.get_or_create(
-    #        current_user=current_user,
-    #        is_match=False,
-    #    )
-    #    friend.users.remove(new_like)
