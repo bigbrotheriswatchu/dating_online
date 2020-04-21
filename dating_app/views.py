@@ -14,7 +14,7 @@ from django.views.generic.edit import FormMixin
 from django.views.generic.list import MultipleObjectMixin
 
 from .forms import ExtendedUserCreationForm, UserProfileForm
-from .models import UserProfile, MatchFriend
+from .models import UserProfile, MatchFriend, Dialog
 
 
 def login(request):
@@ -92,9 +92,25 @@ class MutualMatchView(ListView, MultipleObjectMixin):
 
     def get_queryset(self):
         profile = self.request.user.userprofile
-
         # my_likes = profile.like_ids.values_list('like_ids', flat=True)
         who_liked_me = UserProfile.objects.values_list('pk', flat=True)
 
         return profile.like_ids.filter(pk__in=who_liked_me)
 
+
+
+
+
+def get_last_10_messages(chatId):
+    chat = get_object_or_404(Dialog, id=chatId)
+    return chat.messages.order_by('-timestamp').all()[:10]
+
+
+def get_user_contact(username):
+    user = get_object_or_404(User, username=username)
+    return get_object_or_404(User, user=user)
+
+
+def get_current_chat(chatId):
+    return get_object_or_404(Dialog, id=chatId)
+>>>>>>> chat
