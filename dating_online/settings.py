@@ -54,15 +54,7 @@ INSTALLED_APPS = [
 
 WSGI_APPLICATION = 'dating_online.wsgi.application'
 
-ASGI_APPLICATION = 'dating_online.routing.application'
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
-}
+
 
 
 # for bootstrap forms
